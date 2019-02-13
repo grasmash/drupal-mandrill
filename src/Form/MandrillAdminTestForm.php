@@ -65,9 +65,9 @@ class MandrillAdminTestForm extends ConfirmFormBase {
 
     $form['mandrill_test_address'] = array(
       '#type' => 'textfield',
-      '#title' => t('Email address to send a test email to'),
+      '#title' => $this->t('Email address to send a test email to'),
       '#default_value' => \Drupal::config('system.site')->get('mail'),
-      '#description' => t('Type in an address to have a test email sent there.'),
+      '#description' => $this->t('Type in an address to have a test email sent there.'),
       '#required' => TRUE,
     );
 
@@ -77,25 +77,25 @@ class MandrillAdminTestForm extends ConfirmFormBase {
     if (!$mandrill_test_mail) {
       $form['mandrill_test_bcc_address'] = array(
         '#type' => 'textfield',
-        '#title' => t('Email address to BCC on this test email'),
-        '#description' => t('Type in an address to have a test email sent there.'),
+        '#title' => $this->t('Email address to BCC on this test email'),
+        '#description' => $this->t('Type in an address to have a test email sent there.'),
       );
     }
 
     $form['mandrill_test_body'] = array(
       '#type' => 'textarea',
-      '#title' => t('Test body contents'),
-      '#default_value' => t('If you receive this message it means your site is capable of using Mandrill to send email. This url is here to test click tracking: %link',
-        array('%link' => Link::fromTextAndUrl(t('link'), $click_tracking_url)->toString())),
+      '#title' => $this->t('Test body contents'),
+      '#default_value' => $this->t('If you receive this message it means your site is capable of using Mandrill to send email. This url is here to test click tracking: %link',
+        array('%link' => Link::fromTextAndUrl($this->t('link'), $click_tracking_url)->toString())),
     );
 
     // If sending using the mandrill_test_mail service, attachments are not
     // supported so we hide the "Include attachment" checkbox.
     if (!$mandrill_test_mail) {
       $form['include_attachment'] = array(
-        '#title' => t('Include attachment'),
+        '#title' => $this->t('Include attachment'),
         '#type' => 'checkbox',
-        '#description' => t('If checked, the Drupal icon will be included as an attachment with the test email.'),
+        '#description' => $this->t('If checked, the Drupal icon will be included as an attachment with the test email.'),
         '#default_value' => TRUE,
       );
     }
@@ -112,7 +112,7 @@ class MandrillAdminTestForm extends ConfirmFormBase {
       'module' => 'mandrill',
       'to' => $form_state->getValue('mandrill_test_address'),
       'body' => $form_state->getValue('mandrill_test_body'),
-      'subject' => t('Drupal Mandrill test email'),
+      'subject' => $this->t('Drupal Mandrill test email'),
     );
 
     $bcc_email = $form_state->getValue('mandrill_test_bcc_address');
@@ -123,7 +123,7 @@ class MandrillAdminTestForm extends ConfirmFormBase {
 
     if ($form_state->getValue('include_attachment')) {
       $message['attachments'][] = \Drupal::service('file_system')->realpath('core/themes/bartik/logo.svg');
-      $message['body'] .= ' ' . t('The Drupal icon is included as an attachment to test the attachment functionality.');
+      $message['body'] .= ' ' . $this->t('The Drupal icon is included as an attachment to test the attachment functionality.');
     }
 
     // Get Mandrill mailer service specified in Mailsystem settings.

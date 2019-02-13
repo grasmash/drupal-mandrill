@@ -100,7 +100,7 @@ class MandrillMail implements MailInterface {
           [
             '%module' => $message['module'],
             '%key' => $message['id'],
-            '%mailsystem' => Link::fromTextAndUrl(t('Mail System'), Url::fromRoute('mailsystem.settings'))->toString(),
+            '%mailsystem' => Link::fromTextAndUrl($this->t('Mail System'), Url::fromRoute('mailsystem.settings'))->toString(),
           ]
         );
       }
