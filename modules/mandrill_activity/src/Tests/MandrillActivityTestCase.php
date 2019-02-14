@@ -32,7 +32,7 @@ class MandrillActivityTestCase extends WebTestBase {
   protected function setUp() {
     parent::setUp();
     $config = \Drupal::service('config.factory')->getEditable('mandrill.settings');
-    $config->set('mandrill_api_key', MANDRILL_TEST_API_KEY);
+    $config->set('mandrill_api_key', 'MANDRILL_TEST_API_KEY');
   }
 
   /**
