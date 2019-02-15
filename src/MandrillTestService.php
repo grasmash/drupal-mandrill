@@ -41,32 +41,13 @@ class MandrillTestService extends MandrillService {
    *   TRUE if the mail was successfully accepted for delivery, FALSE otherwise.
    */
   public function send($message) {
-
-    // Construct simple email using values from $message, which has much more
-    // information than we need because it's formatted for Mandrill's sending
-    // API.
-    $to = $message['to'][0]['email'];
-    // Check for subject as string.
-    if (gettype($message['subject']) == 'string') {
-      $subject = $message['subject'];
+    if (\Drupal::config('system.mail')->get('interface.default') === 'test_mail_collector') {
+      $captured_emails = \Drupal::state()->get('system.test_mail_collector') ?: [];
+      $captured_emails[] = $message;
+      \Drupal::state()->set('system.test_mail_collector', $captured_emails);
+      return TRUE;
     }
-    // If subject is not a string we assume it's TranslatableMarkup and call
-    // its render() function.
-    else {
-      $subject = $message['subject']->render();
-    }
-    $body = $message['html'];
-    // Add headers to message.
-    $additional_headers = '';
-    foreach ($message['headers'] as $key => $value) {
-      $additional_headers .= implode(':', [$key, $value]) . "\r\n";
-    }
-
-    // Send email using PHP's mail() function.
-    $result = mail($to, $subject, $body, $additional_headers);
-
-    // Return result of attempt to send mail.
-    return $result;
+    return parent::mail($message);
   }
 
 }
