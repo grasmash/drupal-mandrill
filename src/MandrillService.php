@@ -81,26 +81,50 @@ class MandrillService implements MandrillServiceInterface {
   /**
    * Helper to generate an array of recipients.
    *
-   * @param mixed $receiver
-   *   a comma delimited list of email addresses in 1 of 2 forms:
-   *   user@domain.com
-   *   any number of names <user@domain.com>
+   * This function accepts an array of values keyed in the following way:
+   * $receiver = [
+   *   'to' => 'user@domain.com, any number of names <user@domain.com>',
+   *   'cc' => 'user@domain.com, any number of names <user@domain.com>',
+   *   'bcc' => 'user@domain.com, any number of names <user@domain.com>',
+   * ];
+   * The only required key is 'to'. The other values will automatically be
+   * discovered if present. The strings of email addresses could provide a
+   * single email address or many, depending on the needs of the application.
+   *
+   * This structure is in keeping with the Mandrill API documentation located
+   * here: https://mandrillapp.com/api/docs/messages.html.
+   *
+   * @param mixed $receivers
+   *   An array of comma delimited lists of email addresses.
    *
    * @return array
    *   array of email addresses
    */
-  public function getReceivers($receiver) {
-    $recipients = array();
-    $receiver_array = explode(',', $receiver);
-    foreach ($receiver_array as $email) {
-      if (preg_match(MANDRILL_EMAIL_REGEX, $email, $matches)) {
-        $recipients[] = array(
-          'email' => $matches[2],
-          'name' => $matches[1],
-        );
-      }
-      else {
-        $recipients[] = array('email' => $email);
+  public function getReceivers($receivers) {
+    // Check the input variable type to provide backward compatibility for
+    // when only a string of 'to' recipients are passed.
+    if (is_string($receivers)) {
+      $receivers = [
+        'to' => $receivers,
+      ];
+    }
+    $recipients = [];
+    foreach ($receivers as $type => $receiver) {
+      $receiver_array = explode(',', $receiver);
+      foreach ($receiver_array as $email) {
+        if (preg_match(MANDRILL_EMAIL_REGEX, $email, $matches)) {
+          $recipients[] = [
+            'email' => $matches[2],
+            'name' => $matches[1],
+            'type' => $type,
+          ];
+        }
+        else {
+          $recipients[] = [
+            'email' => $email,
+            'type' => $type,
+          ];
+        }
       }
     }
     return $recipients;

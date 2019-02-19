@@ -177,8 +177,24 @@ class MandrillMail implements MailInterface {
       // (This prevents double-attaching in the drupal_alter hook below.)
       unset($message['params']['attachments']);
     }
+    // Setup the list of recipients from the mail message and header data.
+    $receivers = ['to' => $message['to']];
+    if (isset($message['headers']['cc'])) {
+      $receivers['cc'] = $message['headers']['cc'];
+    }
+    if (isset($message['headers']['bcc'])) {
+      $receivers['bcc'] = $message['headers']['bcc'];
+    }
+    // Include the Start case versions of cc and bcc keys since PHP's array keys
+    // are case-sensitive.
+    if (isset($message['headers']['Cc'])) {
+      $receivers['cc'] = $message['headers']['Cc'];
+    }
+    if (isset($message['headers']['Bcc'])) {
+      $receivers['bcc'] = $message['headers']['Bcc'];
+    }
     // Extract an array of recipients.
-    $to = $this->mandrill->getReceivers($message['to']);
+    $to = $this->mandrill->getReceivers($receivers);
     // Account for the plaintext parameter provided by the mimemail module.
     $plain_text = empty($message['params']['plaintext']) ? MailFormatHelper::htmlToText($message['body']) : $message['params']['plaintext'];
     // Get metadata.
