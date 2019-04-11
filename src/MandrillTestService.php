@@ -18,7 +18,7 @@ class MandrillTestService extends MandrillService {
 
     foreach ($response as $result) {
       // Allow other modules to react based on a send result.
-      \Drupal::moduleHandler()->invokeAll('mandrill_mailsend_result', [$result]);
+      \Drupal::moduleHandler()->invokeAll('mandrill_mailsend_result', [$result], [$message]);
       switch ($result['status']) {
         case "error":
         case "invalid":
