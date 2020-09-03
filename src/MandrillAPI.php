@@ -60,7 +60,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $messages = $mandrill->messages->search("email:{$email}");
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $messages;
@@ -79,7 +79,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $templates = $mandrill->templates->getList();
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $templates;
@@ -97,7 +97,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $accounts = $mandrill->subaccounts->getList();
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $accounts;
@@ -115,7 +115,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $webhooks = $mandrill->webhooks->getList();
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $webhooks;
@@ -133,7 +133,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $domains = $mandrill->inbound->domains();
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $domains;
@@ -151,7 +151,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $users = $mandrill->users->info();
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $users;
@@ -169,7 +169,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $tags = $mandrill->tags->info();
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $tags;
@@ -191,7 +191,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $tag = $mandrill->tags->info($tag);
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $tag;
@@ -213,7 +213,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $data = $mandrill->tags->timeSeries($tag);
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $data;
@@ -232,7 +232,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $data = $mandrill->tags->allTimeSeries();
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $data;
@@ -250,7 +250,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $senders = $mandrill->senders->getList();
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $senders;
@@ -272,7 +272,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $sender = $mandrill->senders->info($email);
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $sender;
@@ -294,7 +294,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $data = $mandrill->senders->timeSeries($email);
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $data;
@@ -313,7 +313,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $urls = $mandrill->urls->getList();
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $urls;
@@ -335,7 +335,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $data = $mandrill->urls->timeSeries($url);
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $data;
@@ -353,7 +353,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $routes = $mandrill->inbound->routes();
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $routes;
@@ -374,7 +374,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $result = $mandrill->inbound->addDomain($domain);
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $result;
@@ -397,7 +397,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $result = $mandrill->webhooks->add($GLOBALS['base_url'] . '/' . $path, $description, $events);
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $result;
@@ -418,7 +418,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $result = $mandrill->inbound->deleteDomain($domain);
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $result;
@@ -443,7 +443,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $result = $mandrill->inbound->addRoute($domain, $pattern, $url);
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $result;
@@ -469,7 +469,7 @@ class MandrillAPI implements MandrillAPIInterface {
         $result = $mandrill->messages->sendTemplate($template_id, $template_content, $message);
       }
     } catch (\Exception $e) {
-      drupal_set_message(t('Mandrill: %message', array('%message' => $e->getMessage())), 'error');
+      \Drupal::messenger()->addError(t('Mandrill: %message', array('%message' => $e->getMessage())));
       $this->log->error($e->getMessage());
     }
     return $result;
@@ -512,7 +512,7 @@ class MandrillAPI implements MandrillAPIInterface {
       if (!$this->isLibraryInstalled()) {
         $msg = t('Failed to load Mandrill PHP library. Please refer to the installation requirements.');
         $this->log->error($msg);
-        drupal_set_message($msg, 'error');
+        \Drupal::messenger()->addError($msg);
         return NULL;
       }
 
@@ -521,7 +521,7 @@ class MandrillAPI implements MandrillAPIInterface {
       if (empty($api_key)) {
         $msg = t('Failed to load Mandrill API Key. Please check your Mandrill settings.');
         $this->log->error($msg);
-        drupal_set_message($msg, 'error');
+        \Drupal::messenger()->addError($msg);
         return FALSE;
       }
       // We allow the class name to be overridden, following the example of core's

@@ -47,7 +47,7 @@ class MandrillTemplateMapDeleteForm extends EntityConfirmFormBase {
 
     \Drupal::service('router.builder')->setRebuildNeeded();
 
-    drupal_set_message($this->t('Mandrill Template Map %label has been deleted.', array('%label' => $this->entity->label())));
+    $this->messenger()->addStatus($this->t('Mandrill Template Map %label has been deleted.', array('%label' => $this->entity->label())));
 
     $form_state->setRedirectUrl($this->getCancelUrl());
   }

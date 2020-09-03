@@ -47,7 +47,7 @@ class MandrillActivityController extends ControllerBase {
       );
 
       $content['activity_table'][$index]['timestamp'] = array(
-        '#markup' => format_date($message['ts'], 'short'),
+        '#markup' => \Drupal::service('date.formatter')->format($message['ts'], 'short'),
       );
 
       $content['activity_table'][$index]['state'] = array(

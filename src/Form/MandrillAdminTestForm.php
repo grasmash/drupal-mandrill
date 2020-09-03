@@ -142,7 +142,7 @@ class MandrillAdminTestForm extends ConfirmFormBase {
 
     // Ensure we have a mailer and send the message.
     if (isset($mailer) && $mailer->mail($message)) {
-      drupal_set_message($this->t('Test email has been sent.'));
+      $this->messenger()->addStatus($this->t('Test email has been sent.'));
     }
   }
 

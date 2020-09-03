@@ -5,7 +5,6 @@ namespace Drupal\mandrill\Plugin\Mail;
 use Drupal\Core\Mail\MailInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Mail\MailFormatHelper;
 
 /**
@@ -141,7 +140,7 @@ class MandrillMail implements MailInterface {
     $blacklisted_keys = explode(',', $this->config->get('mandrill_mail_key_blacklist'));
     $view_content = TRUE;
     foreach ($blacklisted_keys as $key) {
-      if ($message['id'] == Unicode::strtolower(trim($key))) {
+      if ($message['id'] == mb_strtolower(trim($key))) {
         $view_content = FALSE;
         break;
       }

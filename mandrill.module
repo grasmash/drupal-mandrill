@@ -107,7 +107,7 @@ function mandrill_get_module_key_names() {
     'default-system' => "Site-wide default",
   );
   $descriptions = array();
-  foreach (system_rebuild_module_data() as $item) {
+  foreach (\Drupal::service('extension.list.module')->getList() as $item) {
     if ($item->status && !empty($item->info['name'])) {
       $descriptions[strtolower($item->getName())] = (empty($item->info['package']) ? '' : $item->info['package']) . ' » ' . t(':module module', array(':module' => $item->info['name']));
     }
@@ -213,7 +213,7 @@ function mandrill_mail_key_blacklist() {
  *   a comma delimited list of email addresses in 1 of 2 forms:
  *   user@domain.com
  *   any number of names <user@domain.com>
- * 
+ *
  * @return array
  *   array of email addresses
  */

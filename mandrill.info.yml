@@ -3,6 +3,7 @@ type: module
 description: 'Allow for site emails to be sent through Mandrill.'
 package: Mandrill
 core: 8.x
+core_version_requirement: ^8 || ^9
 
 configure: mandrill.admin
 

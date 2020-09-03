@@ -8,14 +8,13 @@
 namespace Drupal\mandrill\Tests;
 
 use Drupal\mandrill\Plugin\Mail\MandrillTestMail;
-use Drupal\simpletest\WebTestBase;
-
+use \Drupal\Tests\BrowserTestBase;
 /**
  * Test core Mandrill functionality.
  *
  * @group mandrill
  */
-class MandrillTestCase extends WebTestBase {
+class MandrillTestCase extends BrowserTestBase {
 
   /**
    * Modules to enable.

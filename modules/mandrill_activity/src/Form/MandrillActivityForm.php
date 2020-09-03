@@ -9,9 +9,7 @@ namespace Drupal\mandrill_activity\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form controller for the MandrillActivity entity edit form.
@@ -19,30 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @ingroup mandrill_activity
  */
 class MandrillActivityForm extends EntityForm {
-
-  /**
-   * The entity query.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  protected $entityQuery;
-
-  /**
-   * @param \Drupal\Core\Entity\Query\QueryFactory $entity_query
-   *   The entity query.
-   */
-  public function __construct(QueryFactory $entity_query) {
-    $this->entityQuery = $entity_query;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity.query')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -133,7 +107,7 @@ class MandrillActivityForm extends EntityForm {
 
     if (!empty($form_entity_type)) {
       // Prep the bundle list before creating the form item.
-      $bundle_info = \Drupal::entityManager()->getBundleInfo($form_entity_type);
+      $bundle_info = \Drupal::service('entity_type.bundle.info')->getBundleInfo($form_entity_type);
 
       $bundles = array('' => t('-- Select --'));
 
@@ -200,7 +174,7 @@ class MandrillActivityForm extends EntityForm {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     if ($form_state->isSubmitted()) {
-      $entity = $this->entityQuery->get('mandrill_activity')
+      $entity = $this->entityTypeManager->getStorage('mandrill_activity')->getQuery()
         ->condition('entity_type', $form_state->getValue('entity_type'))
         ->condition('bundle', $form_state->getValue('bundle'))
         ->execute();
@@ -234,7 +208,7 @@ class MandrillActivityForm extends EntityForm {
    *   TRUE if the entity exists.
    */
   public function exists($id) {
-    $entity = $this->entityQuery->get('mandrill_activity')
+    $entity = $this->entityTypeManager->getStorage('mandrill_activity')->getQuery()
       ->condition('id', $id)
       ->execute();
     return (bool) $entity;
@@ -254,7 +228,7 @@ class MandrillActivityForm extends EntityForm {
   public function fieldmapOptions($entity_type, $entity_bundle = NULL) {
     $options = array('' => t('-- Select --'));
 
-    $fields = \Drupal::entityManager()->getFieldMap();
+    $fields =  \Drupal::service('entity_field.manager')->getFieldMap();
 
     if (isset($fields[$entity_type])) {
       foreach ($fields[$entity_type] as $key => $field) {

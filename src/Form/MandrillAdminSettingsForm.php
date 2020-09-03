@@ -11,6 +11,7 @@ use Drupal\Core\Url;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\mandrill\MandrillServiceInterface;
 use Drupal\mandrill\MandrillAPIInterface;
+use Drupal\Core\Link;
 
 /**
  * Implements an Mandrill Admin Settings form.
@@ -98,11 +99,11 @@ class MandrillAdminSettingsForm extends ConfigFormBase {
     $form['mandrill_api_key'] = array(
       '#title' => $this->t('Mandrill API Key'),
       '#type' => 'textfield',
-      '#description' => $this->t('Create or grab your API key from the %link.', array('%link' => $this->l($this->t('Mandrill settings'), Url::fromUri('https://mandrillapp.com/settings/index')))),
+      '#description' => $this->t('Create or grab your API key from the %link.', array('%link' => Link::fromTextAndUrl($this->t('Mandrill settings'), Url::fromUri('https://mandrillapp.com/settings/index'))->toString())),
       '#default_value' => $key,
     );
     if (!$this->mandrillAPI->isLibraryInstalled()) {
-      drupal_set_message($this->t('The Mandrill PHP library is not installed. Please see installation directions in README.txt'), 'warning');
+      $this->messenger()->addWarning($this->t('The Mandrill PHP library is not installed. Please see installation directions in README.txt'));
     }
     else if ($key) {
       $mailSystemPath = Url::fromRoute('mailsystem.settings');
@@ -129,17 +130,17 @@ class MandrillAdminSettingsForm extends ConfigFormBase {
           '#markup' => $this->t('Mandrill is currently configured to be used by the following Module Keys. To change these settings or '
             . 'configure additional systems to use Mandrill, use %link.<br /><br />%table',
             array(
-              '%link' => $this->l($this->t('Mail System'), $mailSystemPath),
+              '%link' => Link::fromTextAndUrl($this->t('Mail System'), $mailSystemPath)->toString(),
               '%table' => $this->renderer->render($usage_array),
             )),
         );
       }
       elseif (!$form_state->get('rebuild')) {
-        drupal_set_message($this->t(
+        $this->messenger()->addWarning($this->t(
           'PLEASE NOTE: Mandrill is not currently configured for use by Drupal. In order to route your email through Mandrill, '
           . 'you must configure at least one MailSystemInterface (other than mandrill) to use "MandrillMailSystem" in %link, or '
           . 'you will only be able to send Test Emails through Mandrill.',
-          array('%link' => $this->l($this->t('Mail System'), $mailSystemPath))), 'warning');
+          array('%link' => Link::fromTextAndUrl($this->t('Mail System'), $mailSystemPath)->toString())));
       }
       $form['email_options'] = array(
         '#type' => 'fieldset',
@@ -228,8 +229,8 @@ class MandrillAdminSettingsForm extends ConfigFormBase {
         '#type' => 'checkbox',
         '#description' => $this->t('If you select Mandrill as the site-wide default email sender in %mailsystem and check this box, any messages that are sent through Mandrill using module/key pairs that are not specifically registered in mailsystem will cause a message to be written to the %systemlog (type: Mandrill, severity: info). Enable this to identify keys and modules for automated emails for which you would like to have more granular control. It is not recommended to leave this box checked for extended periods, as it slows Mandrill and can clog your logs.',
           array(
-            '%mailsystem' => $this->l($this->t('Mail System'), $mailSystemPath),
-            '%systemlog' => $this->l($this->t('system log'), Url::fromRoute('dblog.overview')),
+            '%mailsystem' => Link::fromTextAndUrl($this->t('Mail System'), $mailSystemPath)->toString(),
+            '%systemlog' => Link::fromTextAndUrl($this->t('system log'), Url::fromRoute('dblog.overview'))->toString(),
           )),
         '#default_value' => $config->get('mandrill_log_defaulted_sends'),
       );

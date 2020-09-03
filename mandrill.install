@@ -52,7 +52,7 @@ function mandrill_requirements($phase) {
 
   if ($phase == 'runtime') {
     // Check for Mandrill library.
-    if (\Doctrine\Common\ClassLoader::classExists('Mandrill')) {
+    if (class_exists('Mandrill')) {
       $requirements['mandrill']['description'] = t('The Mandrill library is installed correctly.');
       $requirements['mandrill']['severity'] = REQUIREMENT_OK;
     }

@@ -7,14 +7,13 @@
 
 namespace Drupal\mandrill_activity\Tests;
 
-use Drupal\simpletest\WebTestBase;
-
+use Drupal\Tests\BrowserTestBase;
 /**
  * Test Mandrill Activity functionality.
  *
  * @group mandrill
  */
-class MandrillActivityTestCase extends WebTestBase {
+class MandrillActivityTestCase extends BrowserTestBase {
 
   /**
    * Modules to enable.

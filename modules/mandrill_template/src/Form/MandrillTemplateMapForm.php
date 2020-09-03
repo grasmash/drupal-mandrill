@@ -9,11 +9,9 @@ namespace Drupal\mandrill_template\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form controller for the MandrillTemplateMap entity edit form.
@@ -21,30 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @ingroup mandrill_template
  */
 class MandrillTemplateMapForm extends EntityForm {
-
-  /**
-   * The entity query.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  protected $entityQuery;
-
-  /**
-   * @param \Drupal\Core\Entity\Query\QueryFactory $entity_query
-   *   The entity query.
-   */
-  public function __construct(QueryFactory $entity_query) {
-    $this->entityQuery = $entity_query;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity.query')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -93,7 +67,7 @@ class MandrillTemplateMapForm extends EntityForm {
     }
     // Check if the currently configured template still exists.
     if (!empty($map->template_id) && !array_key_exists($map->template_id, $template_names)) {
-      drupal_set_message(t('The configured Mandrill template is no longer available, please select a valid one.'), 'warning');
+      $this->messenger()->addWarning(t('The configured Mandrill template is no longer available, please select a valid one.'));
     }
     if (!empty($templates)) {
       $options = array('' => t('-- Select --'));
@@ -161,12 +135,12 @@ class MandrillTemplateMapForm extends EntityForm {
           '#default_value' => isset($map->mailsystem_key) ? $map->mailsystem_key : '',
         );
         if (!$available_modules) {
-          drupal_set_message(t("All email-using modules that have been assigned to Mandrill are already assigned to other template maps"), 'warning');
+          $this->messenger()->addWarning(t("All email-using modules that have been assigned to Mandrill are already assigned to other template maps"));
         }
       }
 
       if (!$mandrill_in_use) {
-        drupal_set_message(t("You have not assigned any Modules to use Mandrill: to use this template, make sure Mandrill is assigned in Mailsystem."), 'warning');
+        $this->messenger()->addWarning(t("You have not assigned any Modules to use Mandrill: to use this template, make sure Mandrill is assigned in Mailsystem."));
       }
     }
     else {
@@ -197,7 +171,7 @@ class MandrillTemplateMapForm extends EntityForm {
   }
 
   public function exists($id) {
-    $entity = $this->entityQuery->get('mandrill_template_map')
+    $entity = $this->entityTypeManager->getStorage('mandrill_template_map')->getQuery()
       ->condition('id', $id)
       ->execute();
     return (bool) $entity;
